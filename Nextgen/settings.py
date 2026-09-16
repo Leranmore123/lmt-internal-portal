@@ -17,9 +17,12 @@ SECRET_KEY = 'django-insecure-is5b2&k^fr9$#z7e&v(q1urls%vzwl-$^hxj)v^t^n_#1=t=zc
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "portal.edulearnntech.in",
+    "www.portal.edulearnntech.in",
     "13.206.147.70",
     "localhost",
     "127.0.0.1",
+    "*",
 ]
 
 # Application definition
@@ -149,5 +152,11 @@ LOGGING = {
     },
 }
 CSRF_TRUSTED_ORIGINS = [
+    "https://portal.edulearnntech.in",
+    "http://portal.edulearnntech.in",
+    "https://www.portal.edulearnntech.in",
+    "http://www.portal.edulearnntech.in",
     "http://13.206.147.70:8000",
+    "http://13.206.147.70:8001",
+    "http://13.206.147.70",
 ]
