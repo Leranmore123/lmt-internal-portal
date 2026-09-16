@@ -24,109 +24,80 @@
     </div>
 
     <div class="glass-panel" style="padding: 0; overflow: hidden; position: relative; border: 2px solid rgba(79, 70, 229, 0.15); box-shadow: var(--shadow-md);" id="eventCarouselContainer">
-        <!-- Event Slide 1 -->
+        {% for event in events %}
+        <!-- Event Slide {{ forloop.counter }} -->
+        <div class="event-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}" style="display: {% if forloop.first %}block{% else %}none{% endif %}; opacity: {% if forloop.first %}1{% else %}0{% endif %}; transition: opacity 0.4s ease-in-out;">
+            <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: center; padding: 2.25rem 2.75rem; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); min-height: 220px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem;">
+                        <span class="badge-status badge-info" style="font-size: 0.8rem; padding: 4px 10px;">
+                            <i class="fa-solid fa-star me-1"></i> Event Highlight {{ forloop.counter }} of {{ events|length }}
+                        </span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">
+                            <i class="fa-solid fa-clock me-1"></i> {{ event.created_at|date:"M d, Y" }}
+                        </span>
+                    </div>
+
+                    <h3 style="font-size: 1.75rem; color: var(--navy-900); font-weight: 800; margin-bottom: 0.75rem; line-height: 1.25;">
+                        {{ event.title }}
+                    </h3>
+
+                    <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 0; max-width: 680px;">
+                        {{ event.description|default:"Learnmore Technologies Event" }}
+                    </p>
+                </div>
+
+                {% if event.image %}
+                <div style="border-radius: 16px; overflow: hidden; height: 180px; box-shadow: var(--shadow-sm); position: relative; border: 1px solid var(--border-light);">
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                {% else %}
+                <div style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); color: white; border-radius: 16px; padding: 2rem; text-align: center; box-shadow: var(--shadow-sm);">
+                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255, 255, 255, 0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 0.75rem;">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div style="font-weight: 800; font-size: 1.15rem; color: white;">Company Event</div>
+                    <div style="font-size: 0.825rem; opacity: 0.9; margin-top: 4px;">Learnmore Technologies</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <!-- Fallback Slide if no events in DB -->
         <div class="event-slide active" data-index="0" style="display: block; opacity: 1; transition: opacity 0.4s ease-in-out;">
             <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: center; padding: 2.25rem 2.75rem; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); min-height: 220px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem;">
                         <span class="badge-status badge-info" style="font-size: 0.8rem; padding: 4px 10px;">
-                            <i class="fa-solid fa-star me-1"></i> Event Highlight 1 of 3
-                        </span>
-                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">
-                            <i class="fa-solid fa-clock me-1"></i> Featured Drive
+                            <i class="fa-solid fa-star me-1"></i> Company Event
                         </span>
                     </div>
-
                     <h3 style="font-size: 1.75rem; color: var(--navy-900); font-weight: 800; margin-bottom: 0.75rem; line-height: 1.25;">
-                        Annual Mega Placement Drive 2024
+                        Welcome to Learnmore Technologies
                     </h3>
-
-                    <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 0; max-width: 680px;">
-                        50+ top IT hiring companies visited Learnmore Technologies campus for candidate placement interviews and direct job offers.
+                    <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 0;">
+                        No events published yet. Click "+ Post Event" above to create company event highlights!
                     </p>
                 </div>
-
-                <div style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); color: white; border-radius: 16px; padding: 2rem; text-align: center; box-shadow: var(--shadow-sm);">
+                <div style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); color: white; border-radius: 16px; padding: 2rem; text-align: center;">
                     <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255, 255, 255, 0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 0.75rem;">
-                        <i class="fa-solid fa-trophy"></i>
+                        <i class="fa-solid fa-bullhorn"></i>
                     </div>
-                    <div style="font-weight: 800; font-size: 1.15rem; color: white;">Placement Fest</div>
-                    <div style="font-size: 0.825rem; opacity: 0.9; margin-top: 4px;">Learnmore Technologies</div>
+                    <div style="font-weight: 800; font-size: 1.15rem; color: white;">Event Portal</div>
                 </div>
             </div>
         </div>
-
-        <!-- Event Slide 2 -->
-        <div class="event-slide" data-index="1" style="display: none; opacity: 0; transition: opacity 0.4s ease-in-out;">
-            <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: center; padding: 2.25rem 2.75rem; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); min-height: 220px;">
-                <div>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem;">
-                        <span class="badge-status badge-success" style="font-size: 0.8rem; padding: 4px 10px;">
-                            <i class="fa-solid fa-code me-1"></i> Event Highlight 2 of 3
-                        </span>
-                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">
-                            <i class="fa-solid fa-clock me-1"></i> Tech Hackathon
-                        </span>
-                    </div>
-
-                    <h3 style="font-size: 1.75rem; color: var(--navy-900); font-weight: 800; margin-bottom: 0.75rem; line-height: 1.25;">
-                        Full-Stack Development Hackathon
-                    </h3>
-
-                    <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 0; max-width: 680px;">
-                        Students showcased innovative AI & Web projects during the 24-hour coding challenge at LMT Tech Center with live jury demos.
-                    </p>
-                </div>
-
-                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 16px; padding: 2rem; text-align: center; box-shadow: var(--shadow-sm);">
-                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255, 255, 255, 0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 0.75rem;">
-                        <i class="fa-solid fa-laptop-code"></i>
-                    </div>
-                    <div style="font-weight: 800; font-size: 1.15rem; color: white;">24h Hackathon</div>
-                    <div style="font-size: 0.825rem; opacity: 0.9; margin-top: 4px;">Learnmore Technologies</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Event Slide 3 -->
-        <div class="event-slide" data-index="2" style="display: none; opacity: 0; transition: opacity 0.4s ease-in-out;">
-            <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: center; padding: 2.25rem 2.75rem; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); min-height: 220px;">
-                <div>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem;">
-                        <span class="badge-status badge-purple" style="font-size: 0.8rem; padding: 4px 10px;">
-                            <i class="fa-solid fa-award me-1"></i> Event Highlight 3 of 3
-                        </span>
-                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">
-                            <i class="fa-solid fa-clock me-1"></i> Award Ceremony
-                        </span>
-                    </div>
-
-                    <h3 style="font-size: 1.75rem; color: var(--navy-900); font-weight: 800; margin-bottom: 0.75rem; line-height: 1.25;">
-                        Excellence & Graduation Award Ceremony
-                    </h3>
-
-                    <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 0; max-width: 680px;">
-                        Celebrating 80%+ graduation rate and honoring top performers with placement certificates & salary hike badges.
-                    </p>
-                </div>
-
-                <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); color: white; border-radius: 16px; padding: 2rem; text-align: center; box-shadow: var(--shadow-sm);">
-                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255, 255, 255, 0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 0.75rem;">
-                        <i class="fa-solid fa-medal"></i>
-                    </div>
-                    <div style="font-weight: 800; font-size: 1.15rem; color: white;">Graduation Honor</div>
-                    <div style="font-size: 0.825rem; opacity: 0.9; margin-top: 4px;">Learnmore Technologies</div>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
 
         <!-- Slideshow Controls & Progress Bar -->
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 2.25rem; background: #f1f5f9; border-top: 1px solid var(--border-light);">
-            <!-- Dots (3 Event Dots) -->
+            <!-- Dots -->
             <div style="display: flex; gap: 8px;" id="carouselDots">
-                <div onclick="manuallyGoToSlide(0)" class="dot-item active-dot" style="width: 12px; height: 12px; border-radius: 50%; background: var(--indigo-600); cursor: pointer; transition: all 0.3s ease;"></div>
-                <div onclick="manuallyGoToSlide(1)" class="dot-item" style="width: 12px; height: 12px; border-radius: 50%; background: var(--text-light); cursor: pointer; transition: all 0.3s ease;"></div>
-                <div onclick="manuallyGoToSlide(2)" class="dot-item" style="width: 12px; height: 12px; border-radius: 50%; background: var(--text-light); cursor: pointer; transition: all 0.3s ease;"></div>
+                {% for event in events %}
+                <div onclick="manuallyGoToSlide({{ forloop.counter0 }})" class="dot-item {% if forloop.first %}active-dot{% endif %}" style="width: 12px; height: 12px; border-radius: 50%; background: {% if forloop.first %}var(--indigo-600){% else %}var(--text-light){% endif %}; cursor: pointer; transition: all 0.3s ease;"></div>
+                {% empty %}
+                <div class="dot-item active-dot" style="width: 12px; height: 12px; border-radius: 50%; background: var(--indigo-600);"></div>
+                {% endfor %}
             </div>
 
             <!-- Navigation Controls -->

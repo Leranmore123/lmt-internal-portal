@@ -45,9 +45,11 @@ def register(request):
 def home(request):
     events = CompanyEvent.objects.all().order_by('-created_at')
     portals = PortalLink.objects.all().order_by('id')
+    form = FacultyLoginForm()
     return render(request, 'Assets/home.html', {
         'events': events,
         'portals': portals,
+        'form': form,
     })
 
 
@@ -620,12 +622,6 @@ def faculty_login(request):
     return render(request, 'Assets/faculty_login.html', {'form': form})
 
 
-
-
-@login_required
-def home(request):
-    form = FacultyLoginForm()
-    return render(request, 'Assets/home.html', {'form': form})
 
 
 

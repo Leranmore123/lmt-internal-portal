@@ -19,11 +19,9 @@
 
     <!-- Glassmorphic Navbar -->
     <nav class="lmt-navbar">
-        <a href="{% url 'home' %}" class="brand-logo">
-            <div class="brand-icon">
-                <i class="fa-solid fa-graduation-cap"></i>
-            </div>
-            <span>LMT <span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Portal</span></span>
+        <a href="{% url 'home' %}" class="brand-logo" style="display: inline-flex; align-items: center; gap: 10px; text-decoration: none;">
+            <img src="{% static 'images/logo.webp' %}" alt="Learnmore Technologies Logo" style="height: 42px; object-fit: contain;">
+            <span style="font-weight: 800; font-size: 1.2rem; color: var(--navy-900);">LMT <span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Portal</span></span>
         </a>
 
         <div class="nav-links">
@@ -99,7 +97,7 @@
 
         <div style="display: flex; align-items: center; gap: 1rem;">
             {% if request.user.is_authenticated %}
-                <div class="user-badge" style="padding: 6px 14px 6px 8px; border-radius: 30px; background: #ffffff; border: 1px solid var(--border-light); display: inline-flex; align-items: center; gap: 10px; box-shadow: var(--shadow-xs);">
+                <div class="user-badge" onclick="toggleUserProfileModal(true)" style="padding: 6px 14px 6px 8px; border-radius: 30px; background: #ffffff; border: 1px solid var(--border-light); display: inline-flex; align-items: center; gap: 10px; box-shadow: var(--shadow-xs); cursor: pointer; transition: all 0.2s ease;" title="Click to view full profile">
                     <div class="avatar" style="width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem;">
                         {{ request.user.username|slice:":1"|upper }}
                     </div>
@@ -157,6 +155,82 @@
         {% block content %}{% endblock %}
     </main>
 
+    <!-- User Profile Details Modal -->
+    {% if request.user.is_authenticated %}
+    <div id="userProfileModal" class="modal-overlay">
+        <div class="modal-box" style="max-width: 480px; padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-light); padding-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; background: var(--indigo-50); color: var(--indigo-600); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem; color: var(--navy-900); font-weight: 800; margin: 0;">User Profile</h3>
+                </div>
+                <button onclick="toggleUserProfileModal(false)" style="background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Profile Header -->
+            <div style="text-align: center; margin-bottom: 1.75rem;">
+                <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 2rem; margin-bottom: 0.75rem; box-shadow: var(--shadow-md);">
+                    {{ request.user.username|slice:":1"|upper }}
+                </div>
+                <h4 style="font-size: 1.3rem; font-weight: 800; color: var(--navy-900); margin-bottom: 0.25rem;">
+                    {{ request.user.get_full_name|default:request.user.username }}
+                </h4>
+                <span class="badge-status badge-info" style="font-size: 0.85rem; padding: 4px 12px; border-radius: 20px;">
+                    <i class="fa-solid fa-user-tag me-1"></i> {{ request.user.profile.role|default:"Employee" }}
+                </span>
+            </div>
+
+            <!-- Profile Details Grid -->
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; background: #f8fafc; padding: 1.25rem; border-radius: 14px; border: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-user me-2" style="color: var(--indigo-600);"></i> Username:</span>
+                    <strong style="color: var(--navy-900);">{{ request.user.username }}</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-id-badge me-2" style="color: var(--indigo-600);"></i> Employee ID:</span>
+                    <strong style="color: var(--navy-900);">{{ request.user.profile.employee_id|default:request.user.username }}</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-sitemap me-2" style="color: var(--indigo-600);"></i> Department:</span>
+                    <strong style="color: var(--navy-900);">{{ request.user.profile.department|default:"Software Development" }}</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-envelope me-2" style="color: var(--indigo-600);"></i> Email Address:</span>
+                    <strong style="color: var(--navy-900);">{{ request.user.email|default:"Not Provided" }}</strong>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-shield-check me-2" style="color: var(--indigo-600);"></i> Access Permissions:</span>
+                    {% if request.session.is_faculty or request.user.is_superuser %}
+                        <span class="badge-status badge-success" style="font-size: 0.75rem;">Full Admin Access</span>
+                    {% else %}
+                        <span class="badge-status badge-purple" style="font-size: 0.75rem;">Standard User Access</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; gap: 10px;">
+                <button type="button" class="btn-lmt btn-secondary-glass" onclick="toggleUserProfileModal(false)" style="flex: 1; justify-content: center;">
+                    Close Profile
+                </button>
+                <form method="post" action="{% url 'logout' %}" style="display: inline; flex: 1;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-lmt btn-danger-glass" style="width: 100%; justify-content: center;">
+                        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Admin Access Modal -->
     <div id="facultyModal" class="modal-overlay">
         <div class="modal-box">
@@ -194,6 +268,16 @@
                 modal.classList.add('active');
             } else {
                 modal.classList.remove('active');
+            }
+        }
+        function toggleUserProfileModal(show) {
+            const modal = document.getElementById('userProfileModal');
+            if (modal) {
+                if (show) {
+                    modal.classList.add('active');
+                } else {
+                    modal.classList.remove('active');
+                }
             }
         }
     </script>
